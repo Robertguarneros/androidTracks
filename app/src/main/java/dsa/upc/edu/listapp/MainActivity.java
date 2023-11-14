@@ -11,8 +11,8 @@ import android.widget.Toast;
 
 import java.util.List;
 
-import dsa.upc.edu.listapp.github.Contributor;
-import dsa.upc.edu.listapp.github.GitHub;
+import dsa.upc.edu.listapp.tracks.Song;
+import dsa.upc.edu.listapp.tracks.TracksService;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -60,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
                             target) {
                         return false;
                     }
+
+                    //Aqui agregamos funcion api para eliminar una cancion
                     @Override
                     public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
                         adapter.remove(viewHolder.getAdapterPosition());
@@ -80,19 +82,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void doApiCall(final SwipeRefreshLayout mySwipeRefreshLayout) {
-        GitHub gitHubService = GitHub.retrofit.create(GitHub.class);
-        Call<List<Contributor>> call = gitHubService.contributors("square", "retrofit");
+        TracksService tracksService = TracksService.retrofit.create(TracksService.class);//creating interface
+        Call<List<Song>> call = tracksService.songs();
 
-        call.enqueue(new Callback<List<Contributor>>() {
+        call.enqueue(new Callback<List<Song>>() {
             @Override
-            public void onResponse(Call<List<Contributor>> call, Response<List<Contributor>> response) {
+            public void onResponse(Call<List<Song>> call, Response<List<Song>> response) {
                 // set the results to the adapter
-                adapter.setData(response.body());
+                adapter.setData(response.body());// we have to modify our adapter to handle this
 
                 if(mySwipeRefreshLayout!=null) mySwipeRefreshLayout.setRefreshing(false);
             }
             @Override
-            public void onFailure(Call<List<Contributor>> call, Throwable t) {
+            public void onFailure(Call<List<Song>> call, Throwable t) {
                 if(mySwipeRefreshLayout!=null) mySwipeRefreshLayout.setRefreshing(false);
 
                 String msg = "Error in retrofit: "+t.toString();

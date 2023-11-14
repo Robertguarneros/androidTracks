@@ -11,10 +11,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import dsa.upc.edu.listapp.github.Contributor;
+import dsa.upc.edu.listapp.tracks.Song;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
-    private List<Contributor> values;
+    private List<Song> values;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -23,7 +23,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         // each data item is just a string in this case
         public TextView txtHeader;
         public TextView txtFooter;
-        public ImageView icon;
         public View layout;
 
         public ViewHolder(View v) {
@@ -31,16 +30,15 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             layout = v;
             txtHeader = (TextView) v.findViewById(R.id.firstLine);
             txtFooter = (TextView) v.findViewById(R.id.secondLine);
-            icon = (ImageView) v.findViewById(R.id.icon);
         }
     }
 
-    public void setData(List<Contributor> myDataset) {
+    public void setData(List<Song> myDataset) {
         values = myDataset;
         notifyDataSetChanged();
     }
 
-    public void add(int position, Contributor item) {
+    public void add(int position, Song item) {
         values.add(position, item);
         notifyItemInserted(position);
     }
@@ -55,7 +53,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public MyAdapter(List<Contributor> myDataset) {
+    public MyAdapter(List<Song> myDataset) {
         values = myDataset;
     }
 
@@ -78,9 +76,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        Contributor c = values.get(position);
-        final String name = c.login;
-        holder.txtHeader.setText(name);
+        Song c = values.get(position);
+        final String songID = c.id;
+        holder.txtHeader.setText(songID);
         holder.txtHeader.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,11 +86,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             }
         });
 
-        holder.txtFooter.setText("Contributions: " + c.contributions);
+        holder.txtFooter.setText("Title: " + c.title +" "+"Singer: "+c.singer);
 
-        GlideApp.with(holder.icon.getContext())
-                .load(c.avatar_url)
-                .into(holder.icon);
     }
 
     // Return the size of your dataset (invoked by the layout manager)
