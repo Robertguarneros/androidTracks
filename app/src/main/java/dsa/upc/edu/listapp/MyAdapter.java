@@ -15,6 +15,15 @@ import dsa.upc.edu.listapp.tracks.Song;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     private List<Song> values;
+    public RecyclerView recyclerView; // Add this field to hold a reference to the RecyclerView
+
+    // Add this method to get the item at a specific position
+    public Song getItem(int position) {
+        if (position >= 0 && position < values.size()) {
+            return values.get(position);
+        }
+        return null;
+    }
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -49,7 +58,24 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     }
 
     public MyAdapter() {
+        this.recyclerView = recyclerView;
         values = new ArrayList<>();
+    }
+    //method to get the songID
+    public TextView getFirstLineTextView(int position) {
+        // Ensure the position is valid
+        if (position >= 0 && position < getItemCount()) {
+            // Get the ViewHolder for the specified position
+            ViewHolder viewHolder = (ViewHolder) recyclerView.findViewHolderForAdapterPosition(position);
+
+            // Return the firstLine TextView if the ViewHolder is not null
+            if (viewHolder != null) {
+                return viewHolder.txtHeader;
+            }
+        }
+
+        // Return null if the position is invalid or ViewHolder is null
+        return null;
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)

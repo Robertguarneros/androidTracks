@@ -7,6 +7,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
+import android.widget.TextClock;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -56,16 +58,49 @@ public class MainActivity extends AppCompatActivity {
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback =
                 new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
                     @Override
-                    public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder
-                            target) {
-                        return false;
+                    public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                        return false; // Return false since you're not supporting item reordering
                     }
 
                     //Aqui agregamos funcion api para eliminar una cancion
                     @Override
                     public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-                        adapter.remove(viewHolder.getAdapterPosition());
+                        // Check if the adapter is not null
+                        if (adapter != null) {
+                            // Get the ID directly using the adapter position
+                            int position = viewHolder.getAdapterPosition();
+                            Song song = adapter.getItem(position);
+
+                            // Check if the song is not null
+                            if (song != null) {
+                                String id = song.id;
+
+                                // Remove the item from the adapter
+                                adapter.remove(position);
+
+                                // Perform your delete operation using the obtained ID
+                                TracksService tracksService = TracksService.retrofit.create(TracksService.class);
+                                Call<Void> callDeleteSong = tracksService.deleteSong(id);
+                                callDeleteSong.enqueue(new Callback<Void>() {
+                                    @Override
+                                    public void onResponse(Call<Void> call, Response<Void> response) {
+                                        if (response.isSuccessful()) {
+                                            Toast.makeText(MainActivity.this, "Song has been deleted", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(MainActivity.this, "Error: " + response.message(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<Void> call, Throwable t) {
+                                        Toast.makeText(MainActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+                        }
                     }
+
+
                 };
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
@@ -99,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
 
                 String msg = "Error in retrofit: "+t.toString();
                 Log.d(TAG,msg);
-                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG);
+                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
             }
         });
     }
