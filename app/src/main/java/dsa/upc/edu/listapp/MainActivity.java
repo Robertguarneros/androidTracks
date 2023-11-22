@@ -1,5 +1,6 @@
 package dsa.upc.edu.listapp;
 
+import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -101,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
 
+
                 };
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
@@ -115,6 +118,12 @@ public class MainActivity extends AppCompatActivity {
         );
 
     }
+
+    //Funcion para cambiar a vista de crear cancion
+    public void goToCreateSongLayout(View view) {
+        setContentView(R.layout.create_song);
+    }
+
 
     private void doApiCall(final SwipeRefreshLayout mySwipeRefreshLayout) {
         TracksService tracksService = TracksService.retrofit.create(TracksService.class);//creating interface
