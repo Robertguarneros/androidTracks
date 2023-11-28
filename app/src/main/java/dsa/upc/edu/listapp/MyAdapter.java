@@ -15,6 +15,7 @@ import dsa.upc.edu.listapp.tracks.Song;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     private List<Song> values;
+    private OnClickListener itemClickListener; // Add an item click listener
     public RecyclerView recyclerView; // Add this field to hold a reference to the RecyclerView
 
     // Add this method to get the item at a specific position
@@ -23,6 +24,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             return values.get(position);
         }
         return null;
+    }
+    // Add this method to set the item click listener
+    public void setOnItemClickListener(OnClickListener listener) {
+        this.itemClickListener = listener;
     }
 
     // Provide a reference to the views for each data item
@@ -39,6 +44,16 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             layout = v;
             txtHeader = (TextView) v.findViewById(R.id.firstLine);
             txtFooter = (TextView) v.findViewById(R.id.secondLine);
+            // Set click listener for the item view
+            itemView.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (itemClickListener != null) {
+                        itemClickListener.onClick(view);
+                    }
+                }
+            });
+
         }
 
     }
@@ -115,6 +130,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         });
 
         holder.txtFooter.setText("Title: " + c.title +" "+"Singer: "+c.singer);
+        // Set click listener for the txtHeader TextView
+        holder.txtHeader.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                remove(holder.getAdapterPosition());
+            }
+        });
 
     }
 

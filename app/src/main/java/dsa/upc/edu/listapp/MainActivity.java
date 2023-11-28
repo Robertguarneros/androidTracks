@@ -54,6 +54,21 @@ public class MainActivity extends AppCompatActivity {
         adapter = new MyAdapter();
         recyclerView.setAdapter(adapter);
 
+        // Set the click listener for MainActivity
+        adapter.setOnItemClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Handle item click in MainActivity
+                int position = recyclerView.getChildLayoutPosition(view);
+                Song clickedSong = adapter.getItem(position);
+
+                // Navigate to EditSongActivity
+                Intent intent = new Intent(MainActivity.this, EditSongActivity.class);
+                intent.putExtra("ID", clickedSong.id);
+                startActivity(intent);
+            }
+        });
+
         doApiCall(null);
 
         // Manage swipe on items
@@ -101,19 +116,6 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     }
-                    /*
-                    //Aquí agregamos funcion para abrir nueva pantalla y editar información de la cancion
-                    @Override
-                    public void onClick(RecyclerView.ViewHolder viewHolder) {
-
-                        // Get the ID directly using the adapter position
-                        int position = viewHolder.getAdapterPosition();
-                        Song song = adapter.getItem(position);
-                        setContentView(R.layout.edit_song);
-                    }
-                    */
-
-
                 };
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
@@ -131,11 +133,19 @@ public class MainActivity extends AppCompatActivity {
 
     //Funcion para cambiar a vista de crear cancion
     public void goToCreateSongLayout(View view) {
-
         //Manera correcta de hacer el cambio de vista
         Intent intent = new Intent(this,CreateSongActivity.class);
         startActivity(intent);
-
+    }
+    //Aquí agregamos funcion para abrir nueva pantalla y editar información de la cancion
+    public void goToEditSong(View view, RecyclerView.ViewHolder viewHolder) {
+        // Get the ID directly using the adapter position
+        int position = viewHolder.getAdapterPosition();
+        Song song = adapter.getItem(position);
+        Intent intent = new Intent(MainActivity.this, EditSongActivity.class);
+        String message = song.id;
+        intent.putExtra("ID", message);
+        startActivity(intent);
     }
 
 
@@ -161,9 +171,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-
-
-
 
 }
