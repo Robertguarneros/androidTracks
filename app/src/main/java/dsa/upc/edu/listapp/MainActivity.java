@@ -101,7 +101,17 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     }
+                    /*
+                    //Aquí agregamos funcion para abrir nueva pantalla y editar información de la cancion
+                    @Override
+                    public void onClick(RecyclerView.ViewHolder viewHolder) {
 
+                        // Get the ID directly using the adapter position
+                        int position = viewHolder.getAdapterPosition();
+                        Song song = adapter.getItem(position);
+                        setContentView(R.layout.edit_song);
+                    }
+                    */
 
 
                 };
@@ -121,7 +131,11 @@ public class MainActivity extends AppCompatActivity {
 
     //Funcion para cambiar a vista de crear cancion
     public void goToCreateSongLayout(View view) {
-        setContentView(R.layout.create_song);
+
+        //Manera correcta de hacer el cambio de vista
+        Intent intent = new Intent(this,CreateSongActivity.class);
+        startActivity(intent);
+
     }
 
 
@@ -147,4 +161,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
+
+
+
 }

@@ -24,7 +24,7 @@ public class CreateSongActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.create_song);
 
         // Initialize the text views and buttons here
         editTextSinger = findViewById(R.id.editTextSinger);

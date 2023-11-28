@@ -40,7 +40,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             txtHeader = (TextView) v.findViewById(R.id.firstLine);
             txtFooter = (TextView) v.findViewById(R.id.secondLine);
         }
+
     }
+
 
     public void setData(List<Song> myDataset) {
         values = myDataset;
@@ -121,5 +123,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     public int getItemCount() {
         return values.size();
     }
+
+
 
 }
